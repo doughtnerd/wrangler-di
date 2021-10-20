@@ -1,10 +1,10 @@
 {
-  "name": "react-dependency-injection",
+  "name": "wranger-di",
   "version": "1.0.0",
-  "description": "A React Hooks library for dependency injection",
+  "description": "A React library for Angular-like dependency injection",
   "author": "doughtnerd",
   "license": "MIT",
-  "repository": "doughtnerd/react-dependency-injection",
+  "repository": "doughtnerd/wranger-di",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",

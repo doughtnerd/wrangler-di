@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactMarkdown from 'react-markdown'
+// import ReactMarkdown from 'react-markdown'
 
 export type CharacterDescriptionProps = {
   description: string
@@ -9,8 +9,9 @@ export const CharacterDescription = ({
   description
 }: CharacterDescriptionProps) => {
   return (
-    <ReactMarkdown data-testid='characterDescription'>
-      {description}
-    </ReactMarkdown>
+    <div data-testid="characterDescription">{description}</div>
+    // <ReactMarkdown data-testid='characterDescription'>
+    //   {description}
+    // </ReactMarkdown>
   )
 }

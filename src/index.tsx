@@ -31,11 +31,11 @@ export const InjectorContextProvider = ({
 
 const InjectorContextConsumer = ({
   component: Component,
-  dependencyList
+  providerList
 }: any) => {
   const { injector } = React.useContext(InjectorContext)
   const [compDeps] = React.useState(() =>
-    dependencyList.map((dep: any) => {
+    providerList.map((dep: any) => {
       return injector.inject(dep)
     })
   )
@@ -46,13 +46,8 @@ const InjectorContextConsumer = ({
   } as any)
 }
 
-export const withDependencies = (
-  component: any,
-  dependencyList: string[]
-): any => {
-  return React.memo(() =>
-    InjectorContextConsumer({ component, dependencyList })
-  )
+export const withProviders = (component: any, providerList: string[]): any => {
+  return React.memo(() => InjectorContextConsumer({ component, providerList }))
 }
 
 export const withInjector = (component: any, providers: Provider[]) => {

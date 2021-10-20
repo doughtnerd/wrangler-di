@@ -1,8 +1,8 @@
 import React from 'react'
-import { withDependencies } from 'react-dependency-injection'
+import { withProviders } from 'wranger-di'
 import { Card } from '../../components/Card'
 import { FlexRow } from '../../components/FlexBox'
-import { ANIME_CHARACTER_API_TOKEN } from './anime-character.service'
+import { ANIME_CHARACTER_API_TOKEN } from './anime-character-api.service'
 import { CharacterDescription } from './components/CharacterDescription'
 import { CharacterImage } from './components/CharacterImage'
 import { CharacterInfoTable } from './components/CharacterInfoTable'
@@ -38,12 +38,13 @@ const AnimeCharacterPage = ({ deps: [apiService] }: any) => {
         >
           <button
             type='button'
+            data-testid="previousCharacterButton"
             disabled={pageNumber === 1}
             onClick={() => setPageNumber((val) => (val === 1 ? 1 : val - 1))}
           >
             Previous
           </button>
-          <button type='button' onClick={() => setPageNumber((val) => val + 1)}>
+          <button type='button' data-testid="nextCharacterButton" onClick={() => setPageNumber((val) => val + 1)}>
             Next
           </button>
         </FlexRow>
@@ -54,7 +55,7 @@ const AnimeCharacterPage = ({ deps: [apiService] }: any) => {
   return null
 }
 
-export const AnimeCharacterPageWithDeps = withDependencies(
+export const AnimeCharacterPageWithDeps = withProviders(
   <AnimeCharacterPage />,
   [ANIME_CHARACTER_API_TOKEN]
 )

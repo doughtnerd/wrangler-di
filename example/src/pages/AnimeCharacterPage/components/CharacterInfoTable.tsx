@@ -13,7 +13,7 @@ export type CharacterInfoTableProps = {
 
 export const CharacterInfoTable = ({ Character }: CharacterInfoTableProps) => {
   return (
-    <LeftAlignedTable data-testid='characterInfoTable'>
+    <LeftAlignedTable data-testid='characterInfo'>
       <tbody>
         <tr>
           <th>Full Name</th>

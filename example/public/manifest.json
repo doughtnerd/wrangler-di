@@ -1,6 +1,6 @@
 {
-  "short_name": "react-dependency-injection",
-  "name": "react-dependency-injection",
+  "short_name": "wranger-di",
+  "name": "wranger-di",
   "icons": [
     {
       "src": "favicon.ico",

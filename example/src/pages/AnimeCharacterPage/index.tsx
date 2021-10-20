@@ -1,5 +1,5 @@
 import React from 'react'
-import { withInjector, Provider } from 'react-dependency-injection'
+import { withInjector, Provider } from 'wranger-di'
 import {
   GRAPHQL_API,
   UrqlGraphQLService
@@ -7,7 +7,7 @@ import {
 import {
   AnimeCharacterAPI,
   ANIME_CHARACTER_API_TOKEN
-} from './anime-character.service'
+} from './anime-character-api.service'
 import { AnimeCharacterPageWithDeps } from './AnimeCharacterPage'
 
 const providers: Provider[] = [
@@ -20,4 +20,12 @@ const providers: Provider[] = [
   }
 ]
 
+
+/** 
+ * Personal opinion is this file doesn't need testing for two reasons:
+ * 1. We assume the library itself has appropriately handled it's testing (perhaps a dangerous assumption but it does simplify testing needs)
+ * 2. We make sure to fully test AnimeCharacterPageWithDeps and each provider
+ * 
+ * With each portion of the code used here independently tested, testing this file is redundant/not valueable
+ * */
 export default withInjector(<AnimeCharacterPageWithDeps />, providers)

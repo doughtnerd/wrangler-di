@@ -1,13 +1,13 @@
-# react-dependency-injection
+# wranger-di
 
 > A React Hooks library for dependency injection
 
-[![NPM](https://img.shields.io/npm/v/react-dependency-injection.svg)](https://www.npmjs.com/package/react-dependency-injection) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/wranger-di.svg)](https://www.npmjs.com/package/wranger-di) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
 ```bash
-npm install --save react-dependency-injection
+npm install --save wranger-di
 ```
 
 ## Usage
@@ -15,8 +15,8 @@ npm install --save react-dependency-injection
 ```tsx
 import React, { Component } from 'react'
 
-import MyComponent from 'react-dependency-injection'
-import 'react-dependency-injection/dist/index.css'
+import MyComponent from 'wranger-di'
+import 'wranger-di/dist/index.css'
 
 class Example extends Component {
   render() {

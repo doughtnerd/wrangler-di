@@ -1,8 +1,8 @@
 import React from 'react'
 import {
   InjectorContextProvider,
-  withDependencies
-} from 'react-dependency-injection'
+  withProviders,
+} from 'wranger-di'
 import {
   GRAPHQL_API,
   UrqlGraphQLService
@@ -37,7 +37,7 @@ const AnimeListPage = ({ deps }: any) => {
   return null
 }
 
-const AnimeListPageWithDeps = withDependencies(<AnimeListPage />, [
+const AnimeListPageWithDeps = withProviders(<AnimeListPage />, [
   ANIME_LIST_API
 ])
 
