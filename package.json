@@ -1,10 +1,10 @@
 {
-  "name": "@doughtnerd/wranger-di",
-  "version": "1.0.1",
+  "name": "@doughtnerd/wrangler-di",
+  "version": "1.0.2",
   "description": "A React library for Angular-like dependency injection",
   "author": "doughtnerd",
   "license": "MIT",
-  "repository": "doughtnerd/wranger-di",
+  "repository": "doughtnerd/wrangler-di",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",

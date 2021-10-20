@@ -1,5 +1,5 @@
 {
-  "name": "wranger-di-example",
+  "name": "wrangler-di-example",
   "homepage": ".",
   "version": "0.0.0",
   "private": true,
@@ -12,7 +12,7 @@
   "dependencies": {
     "graphql": "^15.6.1",
     "react": "link:../node_modules/react",
-    "@doughtnerd/wranger-di": "link:..",
+    "@doughtnerd/wrangler-di": "link:..",
     "react-dom": "link:../node_modules/react-dom",
     "react-markdown": "^7.0.1",
     "react-router-dom": "^5.3.0",
