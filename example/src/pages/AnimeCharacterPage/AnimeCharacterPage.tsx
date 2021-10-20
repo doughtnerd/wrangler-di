@@ -1,5 +1,5 @@
 import React from 'react'
-import { withProviders } from '@dougntnerd/wrangler-di'
+import { withProviders } from '@doughtnerd/wrangler-di'
 import { Card } from '../../components/Card'
 import { FlexRow } from '../../components/FlexBox'
 import { ANIME_CHARACTER_API_TOKEN } from './anime-character-api.service'

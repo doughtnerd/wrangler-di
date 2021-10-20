@@ -1,5 +1,5 @@
 import React from 'react'
-import { withInjector, Provider } from '@dougntnerd/wrangler-di'
+import { withInjector, Provider } from '@doughtnerd/wrangler-di'
 import {
   GRAPHQL_API,
   UrqlGraphQLService

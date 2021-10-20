@@ -1,6 +1,6 @@
 {
   "name": "@doughtnerd/wrangler-di",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A React library for Angular-like dependency injection",
   "author": "doughtnerd",
   "license": "MIT",

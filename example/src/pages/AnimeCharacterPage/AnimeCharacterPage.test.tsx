@@ -1,6 +1,6 @@
 import { fireEvent, render, RenderResult } from '@testing-library/react';
 import React from 'react';
-import { InjectorContextProvider } from '@dougntnerd/wrangler-di';
+import { InjectorContextProvider } from '@doughtnerd/wrangler-di';
 import { UseQueryResponse } from 'urql';
 import { IAnimeCharacterAPI } from './anime-character-api.interface';
 import { ANIME_CHARACTER_API_TOKEN } from './anime-character-api.service';
