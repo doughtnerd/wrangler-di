@@ -31,11 +31,7 @@ export type FactoryProvider = {
   deps?: InjectionToken[]
 }
 
-export type Provider =
-  | ValueProvider
-  | ConstructorProvider
-  | FactoryProvider
-  | StaticClassProvider
+export type Provider = ValueProvider | ConstructorProvider | FactoryProvider | StaticClassProvider
 
 export type ProviderConfigs =
   | Omit<ValueProvider, 'provide'>

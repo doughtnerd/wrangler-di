@@ -1,19 +1,11 @@
 /* eslint-disable new-cap */
 import { DepGraph, DepGraphCycleError } from 'dependency-graph'
-import {
-  ConstructorProvider,
-  InjectionToken,
-  Provider,
-  ProviderConfigs
-} from './provider.type'
+import { ConstructorProvider, InjectionToken, Provider, ProviderConfigs } from './provider.type'
 
 export class Injector {
   private dependencyGraph = new DepGraph<any>()
 
-  constructor(
-    dependencies: Provider[] = [],
-    private parentInjector: Injector | null = null
-  ) {
+  constructor(dependencies: Provider[] = [], private parentInjector: Injector | null = null) {
     dependencies.forEach((dep: any) => this.registerProvider(dep))
     this.resolveDependencies()
   }
@@ -53,9 +45,7 @@ export class Injector {
                 this.dependencyGraph.addNode(dep, { instance: parentDep })
                 this.dependencyGraph.addDependency(token, dep)
               } else {
-                throw new Error(
-                  `Could not resolve dependency: ${dep} for Injectable: ${token}`
-                )
+                throw new Error(`Could not resolve dependency: ${dep} for Injectable: ${token}`)
               }
             }
           }
@@ -63,10 +53,7 @@ export class Injector {
       })
   }
 
-  private getConstructorFunc(
-    providerToken: string,
-    providerConfig: ProviderConfigs
-  ): Function {
+  private getConstructorFunc(providerToken: string, providerConfig: ProviderConfigs): Function {
     let constructorFunc
     if (Object.prototype.hasOwnProperty.call(providerConfig, 'useClass')) {
       constructorFunc = (...deps: any) => {
@@ -77,13 +64,11 @@ export class Injector {
     }
 
     if (Object.prototype.hasOwnProperty.call(providerConfig, 'useFactory')) {
-      constructorFunc =
-        this.dependencyGraph.getNodeData(providerToken).useFactory
+      constructorFunc = this.dependencyGraph.getNodeData(providerToken).useFactory
     }
 
     if (Object.prototype.hasOwnProperty.call(providerConfig, 'useValue')) {
-      constructorFunc = () =>
-        this.dependencyGraph.getNodeData(providerToken).useValue
+      constructorFunc = () => this.dependencyGraph.getNodeData(providerToken).useValue
     }
 
     return constructorFunc
@@ -95,17 +80,10 @@ export class Injector {
     this.dependencyGraph.overallOrder().forEach((providerToken: string) => {
       const providerConfig = this.dependencyGraph.getNodeData(providerToken)
 
-      const constructorFunc = this.getConstructorFunc(
-        providerToken,
-        providerConfig
-      )
+      const constructorFunc = this.getConstructorFunc(providerToken, providerConfig)
 
-      let deps = (providerConfig as any).deps
-        ? (providerConfig as any).deps
-        : []
-      deps = deps.map(
-        (dep: string) => this.dependencyGraph.getNodeData(dep).instance
-      )
+      let deps = (providerConfig as any).deps ? (providerConfig as any).deps : []
+      deps = deps.map((dep: string) => this.dependencyGraph.getNodeData(dep).instance)
 
       if (providerConfig?.instance == null) {
         const instance = constructorFunc(...deps)
