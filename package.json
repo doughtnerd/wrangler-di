@@ -1,5 +1,5 @@
 {
-  "name": "wranger-di",
+  "name": "@doughtnerd/wranger-di",
   "version": "1.0.0",
   "description": "A React library for Angular-like dependency injection",
   "author": "doughtnerd",

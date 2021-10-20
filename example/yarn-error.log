@@ -18,7 +18,7 @@ Trace:
 
 npm manifest: 
   {
-    "name": "wranger-di-example",
+    "name": "@dougntnerd/wrangler-di-example",
     "homepage": ".",
     "version": "0.0.0",
     "private": true,
@@ -31,7 +31,7 @@ npm manifest:
     "dependencies": {
       "graphql": "^15.6.1",
       "react": "link:../node_modules/react",
-      "wranger-di": "link:..",
+      "@dougntnerd/wrangler-di": "link:..",
       "react-dom": "link:../node_modules/react-dom",
       "react-markdown": "^7.0.1",
       "react-router-dom": "^5.3.0",
@@ -9456,7 +9456,7 @@ Lockfile:
       regenerator-runtime "^0.13.3"
       whatwg-fetch "^3.0.0"
   
-  "wranger-di@link:..":
+  "@dougntnerd/wrangler-di@link:..":
     version "0.0.0"
     uid ""
   

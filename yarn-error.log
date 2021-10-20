@@ -28,12 +28,12 @@ Trace:
 
 npm manifest: 
   {
-    "name": "wranger-di",
+    "name": "@dougntnerd/wrangler-di",
     "version": "1.0.0",
     "description": "A React Hooks library for dependency injection",
     "author": "doughtnerd",
     "license": "MIT",
-    "repository": "doughtnerd/wranger-di",
+    "repository": "doughtnerd/@dougntnerd/wrangler-di",
     "main": "dist/index.js",
     "module": "dist/index.modern.js",
     "source": "src/index.tsx",

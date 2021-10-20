@@ -1,5 +1,5 @@
 import React from 'react'
-import { InjectorContextProvider, Provider } from 'wranger-di'
+import { InjectorContextProvider, Provider } from '@dougntnerd/wrangler-di'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { createClient, Provider as UrqlProvider } from 'urql'
 import {

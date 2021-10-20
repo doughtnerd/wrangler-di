@@ -2,7 +2,7 @@ import React from 'react'
 import {
   InjectorContextProvider,
   withProviders,
-} from 'wranger-di'
+} from '@dougntnerd/wrangler-di'
 import {
   GRAPHQL_API,
   UrqlGraphQLService

@@ -1,6 +1,6 @@
 {
-  "short_name": "wranger-di",
-  "name": "wranger-di",
+  "short_name": "@dougntnerd/wrangler-di",
+  "name": "@dougntnerd/wrangler-di",
   "icons": [
     {
       "src": "favicon.ico",
