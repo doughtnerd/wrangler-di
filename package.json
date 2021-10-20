@@ -1,6 +1,6 @@
 {
   "name": "@doughtnerd/wranger-di",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A React library for Angular-like dependency injection",
   "author": "doughtnerd",
   "license": "MIT",
