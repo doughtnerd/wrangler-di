@@ -60,5 +60,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "dependency-graph": "^0.11.0"
+  }
 }

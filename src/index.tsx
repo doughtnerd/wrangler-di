@@ -1,83 +1,29 @@
-import React from 'react'
-
-type InjectionToken = string
-
-type ValueProvider = {
-  provide: InjectionToken
-  useValue: any
-}
-
-type ConstructorProvider = {
-  provide: InjectionToken
-  useClass: any
-}
-
-type FactoryProvider = {
-  provide: InjectionToken
-  useFactory: any
-  deps?: InjectionToken[]
-}
-
-type Provider = ValueProvider | ConstructorProvider | FactoryProvider
-
-const injector = (dependencies: Provider[] = []) => {
-  const dependencyMap = new Map<any, any>()
-
-  function provide(dependency: Provider) {
-    let token
-    let dep
-
-    if (Object.hasOwnProperty.call(dependency, 'useValue')) {
-      token = (dependency as ValueProvider).provide
-      dep = (dependency as ValueProvider).useValue
-    }
-    if (Object.hasOwnProperty.call(dependency, 'useClass')) {
-      token = (dependency as ConstructorProvider).provide
-      // eslint-disable-next-line new-cap
-      dep = new (dependency as ConstructorProvider).useClass()
-    }
-
-    if (Object.hasOwnProperty.call(dependency, 'useFactory')) {
-      token = (dependency as FactoryProvider).provide
-      dep = (dependency as FactoryProvider).useFactory()
-    }
-
-    if (typeof dependency === 'function') {
-      dep = new (dependency as any)()
-      token = dependency
-    }
-
-    dependencyMap.set(token, dep)
-  }
-
-  dependencies.forEach((dep: any) => provide(dep))
-
-  const get = (dependency: any) => {
-    const dep = dependencyMap.get(dependency)
-
-    if (!dep) {
-      throw new Error(`Missing Dependency`)
-    }
-
-    return dep
-  }
-
-  return { get }
-}
+import React, { useEffect } from 'react'
+import { Injector } from './Injector'
+import { Provider } from './provider.type'
 
 type InjectorContextType = {
-  injector: {
-    get: (dependency: any) => {}
-  }
+  injector: Injector
 }
 
-export const InjectorContext = React.createContext<InjectorContextType>({
-  injector: injector()
+const InjectorContext = React.createContext<InjectorContextType>({
+  injector: new Injector()
 })
 
-export const InjectorContextProvider = ({ dependencies, children }: any) => {
+export type InjectorContextProviderProps = {
+  providers: Provider[]
+  children: React.ReactElement<any>
+}
+
+export const InjectorContextProvider = ({
+  providers,
+  children
+}: InjectorContextProviderProps) => {
+  const parentInjector = React.useContext(InjectorContext)
   return (
-    <InjectorContext.Provider value={{ injector: injector(dependencies) }}>
+    <InjectorContext.Provider
+      value={{ injector: new Injector(providers, parentInjector.injector) }}
+    >
       {children}
     </InjectorContext.Provider>
   )
@@ -88,22 +34,53 @@ const InjectorContextConsumer = ({
   dependencyList
 }: any) => {
   const { injector } = React.useContext(InjectorContext)
-
-  const compDeps = dependencyList.map((dep: any) => {
-    return injector.get(dep)
-  })
+  const [compDeps] = React.useState(() =>
+    dependencyList.map((dep: any) => {
+      return injector.inject(dep)
+    })
+  )
 
   return React.cloneElement(Component, {
     ...Component.props,
-    dependencies: compDeps
+    deps: compDeps
   } as any)
 }
 
 export const withDependencies = (
   component: any,
-  dependencyList: any[]
+  dependencyList: string[]
 ): any => {
   return React.memo(() =>
     InjectorContextConsumer({ component, dependencyList })
   )
 }
+
+export const withInjector = (component: any, providers: Provider[]) => {
+  return React.memo(() => {
+    return (
+      <InjectorContextProvider providers={providers}>
+        {component}
+      </InjectorContextProvider>
+    )
+  })
+}
+
+export function useInjector() {
+  const { injector } = React.useContext(InjectorContext)
+
+  return { injector }
+}
+
+export function useProviders(providerList: string[]) {
+  const { injector } = React.useContext(InjectorContext)
+
+  const [providers, setProviders] = React.useState<Provider[]>([])
+
+  useEffect(() => {
+    setProviders(providerList.map((provider) => injector.inject(provider)))
+  }, providerList)
+
+  return providers
+}
+
+export type { Provider } from './provider.type'

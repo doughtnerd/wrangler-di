@@ -1,31 +1,45 @@
 import React from 'react'
-import { InjectorContextProvider } from 'react-dependency-injection'
-import { createClient, Provider } from 'urql'
-// import { AnimeListPageWithDeps } from './pages/AnimeListPage'
+import { InjectorContextProvider, Provider } from 'react-dependency-injection'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { createClient, Provider as UrqlProvider } from 'urql'
 import {
-  GraphQLInjectionToken,
-  GraphQLService
-} from './services/graphql-client.service'
+  GRAPHQL_API,
+  UrqlGraphQLService
+} from './services/urql-graphql-client.service'
 
 const client = createClient({
   url: 'https://graphql.anilist.co'
 })
 
-const AnimeListPage = React.lazy(() => import('./pages/AnimeListPage'))
+const AnimeListPage = React.lazy(
+  () => import('./pages/AnimeListPage/AnimeListPage')
+)
+
+const AnimeCharacterPage = React.lazy(
+  () => import('./pages/AnimeCharacterPage')
+)
+
+const appProviders: Provider[] = [
+  { provide: GRAPHQL_API, useValue: UrqlGraphQLService }
+]
 
 const App = () => {
   return (
-    <Provider value={client}>
-      <InjectorContextProvider
-        dependencies={[
-          { provide: GraphQLInjectionToken, useValue: GraphQLService }
-        ]}
-      >
+    <UrqlProvider value={client}>
+      <InjectorContextProvider providers={appProviders}>
         <React.Suspense fallback={<div>Loading...</div>}>
-          <AnimeListPage />
+          <Router>
+            <Switch>
+              <Route path='/anime-details' component={AnimeListPage}></Route>
+              <Route
+                path='/anime-character-details'
+                component={AnimeCharacterPage}
+              ></Route>
+            </Switch>
+          </Router>
         </React.Suspense>
       </InjectorContextProvider>
-    </Provider>
+    </UrqlProvider>
   )
 }
 
