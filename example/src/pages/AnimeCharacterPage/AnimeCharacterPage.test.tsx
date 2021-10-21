@@ -19,6 +19,7 @@ const defaultTestCharacter = {
   },
   image: { large: 'test-url' },
   dateOfBirth: { day: 1, month: 1, year: 2000 }
+
 }
 
 const testCharacter2 = { ...defaultTestCharacter, ...{ name: { full: 'Test Character 2' } } }
