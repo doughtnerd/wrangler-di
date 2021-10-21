@@ -12,11 +12,13 @@ const InjectorContext = React.createContext<InjectorContextType>({
 
 export type InjectorContextProviderProps = {
   providers: Provider[]
+
   children: React.ReactElement<any>
 }
 
 export const InjectorContextProvider = ({ providers, children }: InjectorContextProviderProps) => {
   const parentInjector = React.useContext(InjectorContext)
+
   return (
     <InjectorContext.Provider
       value={{ injector: new Injector(providers, parentInjector.injector) }}
@@ -28,14 +30,20 @@ export const InjectorContextProvider = ({ providers, children }: InjectorContext
 
 const InjectorContextConsumer = ({ component: Component, providerList }: any) => {
   const { injector } = React.useContext(InjectorContext)
+
   const [compDeps] = React.useState(() =>
     providerList.map((dep: any) => {
       return injector.inject(dep)
     })
   )
 
+  if (!React.isValidElement(Component)) {
+    Component = React.createElement(Component)
+  }
+
   return React.cloneElement(Component, {
     ...Component.props,
+
     deps: compDeps
   } as any)
 }
@@ -44,9 +52,19 @@ export const withProviders = (component: any, providerList: string[]): any => {
   return React.memo(() => InjectorContextConsumer({ component, providerList }))
 }
 
-export const withInjector = (component: any, providers: Provider[]) => {
+export const withInjector = (Component: any, providers: Provider[]) => {
+  if (React.isValidElement(Component)) {
+    return React.memo(() => {
+      return <InjectorContextProvider providers={providers}>{Component}</InjectorContextProvider>
+    })
+  }
+
   return React.memo(() => {
-    return <InjectorContextProvider providers={providers}>{component}</InjectorContextProvider>
+    return (
+      <InjectorContextProvider providers={providers}>
+        <Component />
+      </InjectorContextProvider>
+    )
   })
 }
 

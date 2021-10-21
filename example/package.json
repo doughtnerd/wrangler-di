@@ -10,9 +10,9 @@
     "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
+    "@doughtnerd/wrangler-di": "link:..",
     "graphql": "^15.6.1",
     "react": "link:../node_modules/react",
-    "@doughtnerd/wrangler-di": "link:..",
     "react-dom": "link:../node_modules/react-dom",
     "react-markdown": "^7.0.1",
     "react-router-dom": "^5.3.0",
@@ -21,16 +21,18 @@
   },
   "devDependencies": {
     "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
-    "@types/react-router-dom": "^5.3.1",
-    "@types/react-dom": "link:../node_modules/@types/react-dom",
-    "@types/styled-components": "^5.1.15",
     "@testing-library/jest-dom": "link:../node_modules/@testing-library/jest-dom",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "link:../node_modules/@testing-library/user-event",
     "@types/jest": "link:../node_modules/@types/jest",
     "@types/node": "link:../node_modules/@types/node",
     "@types/react": "link:../node_modules/@types/react",
+    "@types/react-dom": "link:../node_modules/@types/react-dom",
+    "@types/react-router-dom": "^5.3.1",
+    "@types/styled-components": "^5.1.15",
+    "babel-jest": "^27.3.1",
     "react-scripts": "link:../node_modules/react-scripts",
+    "ts-jest": "^27.0.7",
     "typescript": "link:../node_modules/typescript"
   },
   "eslintConfig": {
@@ -47,5 +49,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
   }
 }

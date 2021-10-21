@@ -1,11 +1,11 @@
-import React from 'react'
 import { withProviders } from '@doughtnerd/wrangler-di'
+import React from 'react'
 import { Card } from '../../components/Card'
 import { FlexRow } from '../../components/FlexBox'
-import { ANIME_CHARACTER_API_TOKEN } from './anime-character-api.service'
 import { CharacterDescription } from './components/CharacterDescription'
 import { CharacterImage } from './components/CharacterImage'
 import { CharacterInfoTable } from './components/CharacterInfoTable'
+import { ANIME_CHARACTER_API_TOKEN } from './services/anime-character-api.service'
 
 const AnimeCharacterPage = ({ deps: [apiService] }: any) => {
   const [pageNumber, setPageNumber] = React.useState(1)
@@ -33,18 +33,20 @@ const AnimeCharacterPage = ({ deps: [apiService] }: any) => {
           </FlexRow>
           <CharacterDescription description={data.Character.description} />
         </Card>
-        <FlexRow
-          style={{ justifyContent: 'space-between', padding: '0 16px 0 16px' }}
-        >
+        <FlexRow style={{ justifyContent: 'space-between', padding: '0 16px 0 16px' }}>
           <button
             type='button'
-            data-testid="previousCharacterButton"
+            data-testid='previousCharacterButton'
             disabled={pageNumber === 1}
             onClick={() => setPageNumber((val) => (val === 1 ? 1 : val - 1))}
           >
             Previous
           </button>
-          <button type='button' data-testid="nextCharacterButton" onClick={() => setPageNumber((val) => val + 1)}>
+          <button
+            type='button'
+            data-testid='nextCharacterButton'
+            onClick={() => setPageNumber((val) => val + 1)}
+          >
             Next
           </button>
         </FlexRow>
@@ -55,7 +57,6 @@ const AnimeCharacterPage = ({ deps: [apiService] }: any) => {
   return null
 }
 
-export const AnimeCharacterPageWithDeps = withProviders(
-  <AnimeCharacterPage />,
-  [ANIME_CHARACTER_API_TOKEN]
-)
+export const AnimeCharacterPageWithDeps = withProviders(AnimeCharacterPage, [
+  ANIME_CHARACTER_API_TOKEN
+])
