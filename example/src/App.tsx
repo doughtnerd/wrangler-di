@@ -8,8 +8,6 @@ const client = createClient({
   url: 'https://graphql.anilist.co'
 })
 
-const AnimeListPage = React.lazy(() => import('./pages/AnimeListPage/AnimeListPage'))
-
 const AnimeCharacterPage = React.lazy(() => import('./pages/AnimeCharacterPage'))
 
 const appProviders: Provider[] = [{ provide: GRAPHQL_API, useValue: UrqlGraphQLService }]
@@ -18,15 +16,14 @@ const App = () => {
   return (
     <React.StrictMode>
       <UrqlProvider value={client}>
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <Router>
-          <Switch>
-            <Route path='/anime-details' component={AnimeListPage}></Route>
-            <Route path='/anime-character-details' component={AnimeCharacterPage}></Route>
-          </Switch>
-        </Router>
-      </React.Suspense>
-    </UrqlProvider>
+        <React.Suspense fallback={<div>Loading...</div>}>
+          <Router>
+            <Switch>
+              <Route path='/anime-character-details' component={AnimeCharacterPage}></Route>
+            </Switch>
+          </Router>
+        </React.Suspense>
+      </UrqlProvider>
     </React.StrictMode>
   )
 }

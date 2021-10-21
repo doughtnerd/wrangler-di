@@ -11,6 +11,8 @@ export const CharacterImage = ({
 }: CharacterImageProps) => {
   return (
     <img
+      height="345px"
+      width="245px"
       data-testid='characterImage'
       src={characterImageURL}
       alt={`${characterName}`}

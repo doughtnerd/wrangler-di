@@ -26,7 +26,9 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "typeRoots": ["node_modules/@types"]
   },
   "include": [
     "src"
