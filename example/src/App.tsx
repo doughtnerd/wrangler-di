@@ -1,6 +1,6 @@
 import { Provider, withInjector } from '@doughtnerd/wrangler-di'
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { HashRouter, Redirect, Route, Switch } from 'react-router-dom'
 import { createClient, Provider as UrqlProvider } from 'urql'
 import { GRAPHQL_API, UrqlGraphQLService } from './services/urql-graphql-client.service'
 
@@ -17,11 +17,14 @@ const App = () => {
     <React.StrictMode>
       <UrqlProvider value={client}>
         <React.Suspense fallback={<div>Loading...</div>}>
-          <Router>
+          <HashRouter basename="/">
             <Switch>
-              <Route path='/anime-character-details' component={AnimeCharacterPage}></Route>
+              <Route path={'/'} exact>
+                <Redirect to="/anime-character-details"></Redirect>
+              </Route>
+              <Route path={'/anime-character-details'} exact component={AnimeCharacterPage}></Route>
             </Switch>
-          </Router>
+          </HashRouter>
         </React.Suspense>
       </UrqlProvider>
     </React.StrictMode>

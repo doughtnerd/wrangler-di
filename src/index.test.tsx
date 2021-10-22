@@ -29,4 +29,11 @@ describe('Injector', () => {
 
     expect(mainInjector.inject('B')).toBeInstanceOf(B)
   })
+
+  it('Throws an error if the requested dependency is not available', () => {
+    try {
+      const injector = new Injector([{ provide: 'B', useClass: B, deps: ['A'] }])
+      fail()
+    } catch (e) {}
+  })
 })

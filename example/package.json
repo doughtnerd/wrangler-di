@@ -1,6 +1,6 @@
 {
   "name": "wrangler-di-example",
-  "homepage": ".",
+  "homepage": "https://doughtnerd.github.io/wrangler-di",
   "version": "0.0.0",
   "private": true,
   "scripts": {
