@@ -6,9 +6,7 @@ type InjectorContextType = {
   injector: Injector
 }
 
-const InjectorContext = React.createContext<InjectorContextType>({
-  injector: new Injector()
-})
+const InjectorContext = React.createContext<InjectorContextType | null>(null)
 
 export type InjectorContextProviderProps = {
   providers: Provider[]
@@ -21,15 +19,30 @@ export const InjectorContextProvider = ({ providers, children }: InjectorContext
 
   return (
     <InjectorContext.Provider
-      value={{ injector: new Injector(providers, parentInjector.injector) }}
+      value={{ injector: new Injector(providers, parentInjector?.injector) }}
     >
       {children}
     </InjectorContext.Provider>
   )
 }
 
-const InjectorContextConsumer = ({ component: Component, providerList }: any) => {
-  const { injector } = React.useContext(InjectorContext)
+const InjectorContextConsumer = ({
+  component: Component,
+  providerList
+}: {
+  component: any
+  providerList: string[]
+}): React.ReactElement<any | { deps: any[] }> => {
+  const injectorContext = React.useContext(InjectorContext)
+
+  const injector = injectorContext?.injector
+  if (!injector) {
+    throw new Error(
+      `withProviders used without Injector Context Provider. 
+      Cannot locate providers: ${providerList}
+      `
+    )
+  }
 
   const [compDeps] = React.useState(() =>
     providerList.map((dep: any) => {
@@ -69,13 +82,23 @@ export const withInjector = (Component: any, providers: Provider[]) => {
 }
 
 export function useInjector() {
-  const { injector } = React.useContext(InjectorContext)
+  const injectorContext = React.useContext(InjectorContext)
 
-  return { injector }
+  return { injector: injectorContext?.injector }
 }
 
 export function useProviders(providerList: string[]) {
-  const { injector } = React.useContext(InjectorContext)
+  const injectorContext = React.useContext(InjectorContext)
+
+  const injector = injectorContext?.injector
+
+  if (!injector) {
+    throw new Error(
+      `useProviders used without Injector Context Provider. 
+      Cannot locate providers: ${providerList}
+      `
+    )
+  }
 
   const [providers, setProviders] = React.useState<Provider[]>([])
 
@@ -87,3 +110,4 @@ export function useProviders(providerList: string[]) {
 }
 
 export type { Provider } from './provider.type'
+

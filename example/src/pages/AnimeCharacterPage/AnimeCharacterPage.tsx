@@ -3,9 +3,16 @@ import React from 'react'
 import { FlexRow } from '../../components/FlexBox'
 import { IndeterminateLoader } from '../../components/IndeterminateLoader'
 import { CharacterCard } from './components/CharacterCard'
+import { IAnimeCharacterAPI } from './services/anime-character-api.interface'
 import { ANIME_CHARACTER_API_TOKEN } from './services/anime-character-api.service'
 
-const AnimeCharacterPage = ({ deps: [apiService] }: any) => {
+type AnimeCharacterPageProps = {
+  deps: [
+    IAnimeCharacterAPI
+  ]
+}
+
+const AnimeCharacterPage = ({ deps: [apiService] }: AnimeCharacterPageProps) => {
   const [pageNumber, setPageNumber] = React.useState(1)
 
   const [{ fetching, data, error }] = apiService.getCharacterInfo(pageNumber)

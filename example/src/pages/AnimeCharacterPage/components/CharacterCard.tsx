@@ -12,7 +12,7 @@ export type CharacterCardProps = {
 
 export const CharacterCard = ({ Character }: CharacterCardProps) => {
     return (
-        <Card>
+        <Card data-testid="characterCard">
             <FlexRow style={{ justifyContent: 'space-around' }}>
                 <CharacterImage
                     fullCharacterName={Character.name.full}
@@ -20,7 +20,7 @@ export const CharacterCard = ({ Character }: CharacterCardProps) => {
                 />
                 <CharacterInfoTable Character={Character} />
             </FlexRow>
-            <div style={{ maxHeight: '300px', overflowY: 'scroll' }} data-testid="characterDescription">
+            <div style={{ maxHeight: '300px', overflowY: 'scroll' }}>
                 <CharacterDescription description={Character.description} />
             </div>
         </Card>
