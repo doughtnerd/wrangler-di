@@ -36,6 +36,7 @@
       {
         "code": 100
       }
-    ]
+    ],
+    "linebreak-style":"off"
   }
 }

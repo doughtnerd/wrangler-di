@@ -110,4 +110,5 @@ export function useProviders(providerList: string[]) {
 }
 
 export type { Provider } from './provider.type'
+// eslint-disable-next-line prettier/prettier
 
