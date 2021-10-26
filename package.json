@@ -1,7 +1,8 @@
 {
   "name": "@doughtnerd/wrangler-di",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A React library for Angular-like dependency injection",
+  "keywords": ["react", "angular", "dependency", "dependency-injection", "inversion-of-control", "injection"],
   "author": "doughtnerd",
   "license": "MIT",
   "repository": "doughtnerd/wrangler-di",
