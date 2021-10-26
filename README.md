@@ -185,7 +185,7 @@ const pageProviders = [
 const MyFavoritesPage = ({deps: [favoritesApi]}) => {
   return (
     <ul>
-      {deps.favorites.map(favorite => <li key={favorite}>{favorite}</li>)}
+      {favoritesApi.getFavorites().map(favorite => <li key={favorite}>{favorite}</li>)}
     </ul>
   )
 }
@@ -197,7 +197,7 @@ export default withInjector(MyFavoritesPageWithDeps, pageProviders)
 ```
 
 ### withProviders
-This function takes two parameters: The component you wish to inject with dependencies, and an array or Injection Tokens
+This function takes two parameters: The component you wish to inject with dependencies, and an array of Injection Tokens
 ```jsx
 // This is correct, as long as 'AuthService' is injected somewhere above this component in the dom tree
 withProviders(SignInPage, [ 'AuthService' ])
