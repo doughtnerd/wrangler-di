@@ -1,19 +1,21 @@
 {
   "name": "@doughtnerd/wrangler-di",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A React library for Angular-like dependency injection",
   "author": "doughtnerd",
   "license": "MIT",
   "repository": "doughtnerd/wrangler-di",
   "main": "dist/index.js",
+  "umd:main": "dist/index.umd.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
   "engines": {
     "node": ">=10"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "build": "microbundle-crl --no-compress --format modern,umd",
+    "build:prod": "microbundle-crl --compress --sourcemap false --format modern,umd",
+    "start": "microbundle-crl watch --no-compress --format modern,umd",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
     "test:lint": "eslint ./src/*",
@@ -23,7 +25,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^17.0.2"
+    "react": "^16.8.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",

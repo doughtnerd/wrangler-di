@@ -48,7 +48,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
       - run: yarn install --frozen-lockfile
-      - run: yarn run build
+      - run: yarn run build:prod
       - name: Archive Production Artifact Functions
         uses: actions/upload-artifact@master
         with:
