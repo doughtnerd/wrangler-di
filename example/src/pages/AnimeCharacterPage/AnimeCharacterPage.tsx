@@ -6,13 +6,13 @@ import { CharacterCard } from './components/CharacterCard'
 import { IAnimeCharacterAPI } from './services/anime-character-api.interface'
 import { ANIME_CHARACTER_API_TOKEN } from './services/anime-character-api.service'
 
-type AnimeCharacterPageProps = {
+export type AnimeCharacterPageProps = {
   deps: [
     IAnimeCharacterAPI
   ]
 }
 
-const AnimeCharacterPage = ({ deps: [apiService] }: AnimeCharacterPageProps) => {
+export const AnimeCharacterPage = ({ deps: [apiService] }: AnimeCharacterPageProps) => {
   const [pageNumber, setPageNumber] = React.useState(1)
 
   const [{ fetching, data, error }] = apiService.getCharacterInfo(pageNumber)

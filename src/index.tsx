@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { JSXElementConstructor, MemoExoticComponent, ReactElement } from 'react'
 import { Injector } from './Injector'
 import { Provider } from './provider.type'
 
@@ -10,7 +10,6 @@ const InjectorContext = React.createContext<InjectorContextType | null>(null)
 
 export type InjectorContextProviderProps = {
   providers: Provider[]
-
   children: React.ReactElement<any>
 }
 
@@ -61,7 +60,10 @@ const InjectorContextConsumer = ({
   } as any)
 }
 
-export const withProviders = (component: any, providerList: string[]): any => {
+export const withProviders = <T extends unknown>(
+  component: T,
+  providerList: string[]
+): MemoExoticComponent<() => ReactElement<any, string | JSXElementConstructor<any>>> => {
   return React.memo(() => InjectorContextConsumer({ component, providerList }))
 }
 
@@ -79,34 +81,6 @@ export const withInjector = (Component: any, providers: Provider[]) => {
       </InjectorContextProvider>
     )
   })
-}
-
-export function useInjector() {
-  const injectorContext = React.useContext(InjectorContext)
-
-  return { injector: injectorContext?.injector }
-}
-
-export function useProviders(providerList: string[]) {
-  const injectorContext = React.useContext(InjectorContext)
-
-  const injector = injectorContext?.injector
-
-  if (!injector) {
-    throw new Error(
-      `useProviders used without Injector Context Provider. 
-      Cannot locate providers: ${providerList}
-      `
-    )
-  }
-
-  const [providers, setProviders] = React.useState<Provider[]>([])
-
-  useEffect(() => {
-    setProviders(providerList.map((provider) => injector.inject(provider)))
-  }, providerList)
-
-  return providers
 }
 
 export type { Provider } from './provider.type'

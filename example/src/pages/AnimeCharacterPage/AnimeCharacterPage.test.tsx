@@ -1,15 +1,13 @@
-import { InjectorContextProvider } from '@doughtnerd/wrangler-di'
 import { fireEvent, render, RenderResult } from '@testing-library/react'
 import React from 'react'
 import { UseQueryResponse } from 'urql'
-import { AnimeCharacterPageWithDeps } from './AnimeCharacterPage'
+import { AnimeCharacterPage } from './AnimeCharacterPage'
 import { IAnimeCharacterAPI } from './services/anime-character-api.interface'
-import { ANIME_CHARACTER_API_TOKEN } from './services/anime-character-api.service'
 
 
-// Annoying workaround I have to use for now for react-markdown until I figure out why jest is being a pain.
+// Annoying workaround I have to use for now for react-markdown until I figure out why jest is being a pain for this lib.
 jest.mock('react-markdown', () => {
-  return () => <div></div>
+  return (props: any) => <div {...props}></div>
 })
 
 
@@ -41,11 +39,8 @@ const renderComponent = (
   animeApi: IAnimeCharacterAPI = new TestAnimeCharacterAPI()
 ): RenderResult => {
   return render(
-    <InjectorContextProvider
-      providers={[{ provide: ANIME_CHARACTER_API_TOKEN, useValue: animeApi }]}
-    >
-      <AnimeCharacterPageWithDeps />
-    </InjectorContextProvider>
+    // Notice with prop injection, we don't need to use a context at all in order to test this component.
+    <AnimeCharacterPage deps={[animeApi]} />
   )
 }
 
@@ -131,7 +126,7 @@ describe('AnimeCharacterPage', () => {
       })
     })
 
-    describe('When the user navigates to the previous character AND theyre at the first page', () => {
+    describe('When the user navigates to the previous character AND they\'re at the first page', () => {
       test('Then nothing happens', () => {
         const { getByText, getByTestId } = renderComponent()
 

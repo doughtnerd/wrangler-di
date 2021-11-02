@@ -10,16 +10,9 @@ const client = createClient({
 
 const AnimeCharacterPage = React.lazy(() => import('./pages/AnimeCharacterPage'))
 
-class A {}
-class B {
-  constructor(a: A) {
-  }
-}
 
 const appProviders: Provider[] = [
-  { provide: GRAPHQL_API, useValue: UrqlGraphQLService },
-  { provide: 'A', useClass: A},
-  { provide: 'B', useClass: B, deps: ['A']}
+  { provide: GRAPHQL_API, useValue: UrqlGraphQLService }
 ]
 
 const App = () => {
