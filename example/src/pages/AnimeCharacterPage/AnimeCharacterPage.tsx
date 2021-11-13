@@ -1,7 +1,10 @@
 import { withProviders } from '@doughtnerd/wrangler-di'
 import React from 'react'
+import { useParams } from 'react-router'
+import { Link } from 'react-router-dom'
 import { FlexRow } from '../../components/FlexBox'
 import { IndeterminateLoader } from '../../components/IndeterminateLoader'
+import { PageLayout } from '../../components/PageLayout'
 import { CharacterCard } from './components/CharacterCard'
 import { IAnimeCharacterAPI } from './services/anime-character-api.interface'
 import { ANIME_CHARACTER_API_TOKEN } from './services/anime-character-api.service'
@@ -12,40 +15,40 @@ export type AnimeCharacterPageProps = {
   ]
 }
 
+
 export const AnimeCharacterPage = ({ deps: [apiService] }: AnimeCharacterPageProps) => {
-  const [pageNumber, setPageNumber] = React.useState(1)
+  const params: { characterId: string } = useParams()
+  const characterId = Number.parseInt(params.characterId, 10)
 
-  const [{ fetching, data, error }] = apiService.getCharacterInfo(pageNumber)
-
-  if (error) {
-    return <div data-testid="errorMessage">Error!</div>
-  }
+  const [{ fetching, data, error }] = apiService.getCharacterInfo(characterId)
 
   if (fetching) {
     return <IndeterminateLoader />
   }
 
   return (
-    <div style={{ margin: 'auto', maxWidth: '800px', padding: '64px' }}>
-      <CharacterCard Character={data.Character} />
+    <PageLayout>
+      {error && <div data-testid="errorMessage">No Character with ID: {characterId} Found</div>}
+      {data?.Character && <CharacterCard Character={data.Character} />}
       <FlexRow style={{ justifyContent: 'space-between', padding: '0 16px 0 16px' }}>
-        <button
-          type='button'
+        <Link
+          to={{
+            pathname: `/anime-character-details/${characterId === 1 ? characterId : characterId - 1}`,
+          }}
           data-testid='previousCharacterButton'
-          disabled={pageNumber === 1}
-          onClick={() => setPageNumber((val) => (val === 1 ? 1 : val - 1))}
         >
           Previous
-        </button>
-        <button
-          type='button'
+        </Link>
+        <Link
+          to={{
+            pathname: `/anime-character-details/${characterId + 1}`,
+          }}
           data-testid='nextCharacterButton'
-          onClick={() => setPageNumber((val) => val + 1)}
         >
           Next
-        </button>
+        </Link>
       </FlexRow>
-    </div>
+    </PageLayout>
   )
 }
 

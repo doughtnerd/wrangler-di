@@ -1,4 +1,4 @@
-import React, { JSXElementConstructor, MemoExoticComponent, ReactElement } from 'react'
+import React from 'react'
 import { Injector } from './Injector'
 import { Provider } from './provider.type'
 
@@ -60,27 +60,22 @@ const InjectorContextConsumer = ({
   } as any)
 }
 
-export const withProviders = <T extends unknown>(
-  component: T,
-  providerList: string[]
-): MemoExoticComponent<() => ReactElement<any, string | JSXElementConstructor<any>>> => {
-  return React.memo(() => InjectorContextConsumer({ component, providerList }))
+export const withProviders = <T extends unknown>(component: T, providerList: string[]) => {
+  return () => InjectorContextConsumer({ component, providerList })
 }
 
 export const withInjector = (Component: any, providers: Provider[]) => {
   if (React.isValidElement(Component)) {
-    return React.memo(() => {
-      return <InjectorContextProvider providers={providers}>{Component}</InjectorContextProvider>
-    })
+    return () => (
+      <InjectorContextProvider providers={providers}>{Component}</InjectorContextProvider>
+    )
   }
 
-  return React.memo(() => {
-    return (
-      <InjectorContextProvider providers={providers}>
-        <Component />
-      </InjectorContextProvider>
-    )
-  })
+  return () => (
+    <InjectorContextProvider providers={providers}>
+      <Component />
+    </InjectorContextProvider>
+  )
 }
 
 export type { Provider } from './provider.type'

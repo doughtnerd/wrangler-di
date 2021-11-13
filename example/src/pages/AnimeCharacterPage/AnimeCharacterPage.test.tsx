@@ -1,9 +1,10 @@
 import { fireEvent, render, RenderResult } from '@testing-library/react'
+import { createBrowserHistory } from 'history'
 import React from 'react'
+import { Route, Router } from 'react-router-dom'
 import { UseQueryResponse } from 'urql'
 import { AnimeCharacterPage } from './AnimeCharacterPage'
 import { IAnimeCharacterAPI } from './services/anime-character-api.interface'
-
 
 // Annoying workaround I have to use for now for react-markdown until I figure out why jest is being a pain for this lib.
 jest.mock('react-markdown', () => {
@@ -36,11 +37,17 @@ class TestAnimeCharacterAPI implements IAnimeCharacterAPI {
 }
 
 const renderComponent = (
-  animeApi: IAnimeCharacterAPI = new TestAnimeCharacterAPI()
+  animeApi: IAnimeCharacterAPI = new TestAnimeCharacterAPI(),
+  history: any = createBrowserHistory()
 ): RenderResult => {
   return render(
     // Notice with prop injection, we don't need to use a context at all in order to test this component.
-    <AnimeCharacterPage deps={[animeApi]} />
+    // Unfortunately, React router still needs to be added to the test in our case but that's a limitation of React Router, not this library.
+    <Router history={history}>
+      <Route exact path="/anime-character-details/:characterId">
+        <AnimeCharacterPage deps={[animeApi]} />
+      </Route>
+    </Router>
   )
 }
 
@@ -56,7 +63,9 @@ describe('AnimeCharacterPage', () => {
       test('Then the user is shown an error message', () => {
         const animeCharacterAPI = new TestAnimeCharacterAPI()
         jest.spyOn(animeCharacterAPI, 'getCharacterInfo').mockReturnValue([{ fetching: false, stale: false, data: {}, error: { graphQLErrors: [], name: 'Test', message: "Test Error" } }, jest.fn()])
-        const { getByTestId } = renderComponent(animeCharacterAPI)
+        const history = createBrowserHistory()
+        history.push('/anime-character-details/1')
+        const { getByTestId } = renderComponent(animeCharacterAPI, history)
         getByTestId('errorMessage')
       })
     })
@@ -66,7 +75,9 @@ describe('AnimeCharacterPage', () => {
       test('Then the user is shown a loading indicator', () => {
         const animeCharacterAPI = new TestAnimeCharacterAPI()
         jest.spyOn(animeCharacterAPI, 'getCharacterInfo').mockReturnValue([{ fetching: true, stale: false, data: {} }, jest.fn()])
-        const { getByTestId } = renderComponent(animeCharacterAPI)
+        const history = createBrowserHistory()
+        history.push('/anime-character-details/1')
+        const { getByTestId } = renderComponent(animeCharacterAPI, history)
         getByTestId('indeterminateLoadingIndicator')
       })
     })
@@ -80,7 +91,9 @@ describe('AnimeCharacterPage', () => {
       test('Then they should see the first character by default', () => {
         const animeCharacterAPI = new TestAnimeCharacterAPI()
         jest.spyOn(animeCharacterAPI, 'getCharacterInfo')
-        renderComponent(animeCharacterAPI)
+        const history = createBrowserHistory()
+        history.push('/anime-character-details/1')
+        renderComponent(animeCharacterAPI, history)
         expect(animeCharacterAPI.getCharacterInfo).toHaveBeenCalledWith(1)
       })
 
@@ -108,7 +121,9 @@ describe('AnimeCharacterPage', () => {
      */
     describe('When the user navigates to the next character', () => {
       test('Then the new character is displayed', () => {
-        const { getByText, getByTestId } = renderComponent()
+        const history = createBrowserHistory()
+        history.push('/anime-character-details/1')
+        const { getByText, getByTestId } = renderComponent(undefined, history)
 
         fireEvent.click(getByTestId('nextCharacterButton'))
         getByText(testCharacter2.name.full)
@@ -117,7 +132,9 @@ describe('AnimeCharacterPage', () => {
 
     describe('When the user navigates to the previous character', () => {
       test('Then the new character is displayed', () => {
-        const { getByText, getByTestId } = renderComponent()
+        const history = createBrowserHistory()
+        history.push('/anime-character-details/1')
+        const { getByText, getByTestId } = renderComponent(undefined, history)
 
         fireEvent.click(getByTestId('nextCharacterButton'))
         fireEvent.click(getByTestId('previousCharacterButton'))
@@ -128,7 +145,9 @@ describe('AnimeCharacterPage', () => {
 
     describe('When the user navigates to the previous character AND they\'re at the first page', () => {
       test('Then nothing happens', () => {
-        const { getByText, getByTestId } = renderComponent()
+        const history = createBrowserHistory()
+        history.push('/anime-character-details/1')
+        const { getByText, getByTestId } = renderComponent(undefined, history)
 
         getByText(defaultTestCharacter.name.full)
         fireEvent.click(getByTestId('previousCharacterButton'))

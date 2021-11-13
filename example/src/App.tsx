@@ -23,9 +23,9 @@ const App = () => {
           <HashRouter basename="/">
             <Switch>
               <Route path={'/'} exact>
-                <Redirect to="/anime-character-details"></Redirect>
+                <Redirect to="/anime-character-details/1"></Redirect>
               </Route>
-              <Route path={'/anime-character-details'} exact component={AnimeCharacterPage}></Route>
+              <Route path={'/anime-character-details/:characterId'} exact component={AnimeCharacterPage}></Route>
             </Switch>
           </HashRouter>
         </React.Suspense>
