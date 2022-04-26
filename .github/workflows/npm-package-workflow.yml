@@ -22,19 +22,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "yarn"
-      - run: yarn install --frozen-lockfile
-      - run: yarn run test
-      # - run: |
-      #     cd example
-      #     yarn install
-      # - run: |
-      #     cd example
-      #     yarn run test
-      # - name: Jest badges generation action
-      #   uses: jpb06/jest-badges-action@v1.6.0
-      #   with:
-      #     branches: master
+          cache: "npm"
+      - run: npm install --frozen-lockfile
+      - run: npm run test
 
   build:
     needs: test
@@ -50,9 +40,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "yarn"
-      - run: yarn install --frozen-lockfile
-      - run: yarn run build:prod
+          cache: "npm"
+      - run: npm install --frozen-lockfile
+      - run: npm run build:prod
       - name: Archive Production Artifact Functions
         uses: actions/upload-artifact@master
         with:
