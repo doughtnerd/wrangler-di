@@ -26,9 +26,7 @@ export const CharacterInfoTable = ({ Character }: CharacterInfoTableProps) => {
         <tr>
           <th>Date Of Birth</th>
           <td>
-            <CharacterDateOfBirth
-              {...Character.dateOfBirth}
-            ></CharacterDateOfBirth>
+            <CharacterDateOfBirth {...Character.dateOfBirth} />
           </td>
         </tr>
         <tr>

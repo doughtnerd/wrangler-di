@@ -2,7 +2,7 @@ import { UseQueryResponse } from 'urql'
 import { UrqlGraphQLService } from '../../../services/urql-graphql-client.service'
 import { IAnimeCharacterAPI } from './anime-character-api.interface'
 
-var animeCharacterInfoQuery = `
+const animeCharacterInfoQuery = `
 query ($id: Int) {
   Character(id: $id){
     description
@@ -23,9 +23,10 @@ query ($id: Int) {
 }
 `
 
-export const ANIME_CHARACTER_API_TOKEN: string = 'APIService'
+export const ANIME_CHARACTER_API_TOKEN = 'APIService'
 
 export class AnimeCharacterAPI implements IAnimeCharacterAPI {
+  // eslint-disable-next-line no-useless-constructor
   constructor(private graphqlService: typeof UrqlGraphQLService) {}
 
   public getCharacterInfo(characterId: number): UseQueryResponse<any, { id: number }> {

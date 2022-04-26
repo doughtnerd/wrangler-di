@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { fireEvent, render, RenderResult } from '@testing-library/react'
 import { createBrowserHistory } from 'history'
 import React from 'react'
@@ -8,9 +9,8 @@ import { IAnimeCharacterAPI } from './services/anime-character-api.interface'
 
 // Annoying workaround I have to use for now for react-markdown until I figure out why jest is being a pain for this lib.
 jest.mock('react-markdown', () => {
-  return (props: any) => <div {...props}></div>
+  return (props: any) => <div {...props} />
 })
-
 
 const defaultTestCharacter = {
   name: {
@@ -18,7 +18,6 @@ const defaultTestCharacter = {
   },
   image: { large: 'test-url' },
   dateOfBirth: { day: 1, month: 1, year: 2000 }
-
 }
 
 const testCharacter2 = { ...defaultTestCharacter, ...{ name: { full: 'Test Character 2' } } }
@@ -32,7 +31,10 @@ const testCharacter2 = { ...defaultTestCharacter, ...{ name: { full: 'Test Chara
 class TestAnimeCharacterAPI implements IAnimeCharacterAPI {
   getCharacterInfo(characterId: number): UseQueryResponse<any, { id: number }> {
     const characters = [null, defaultTestCharacter, testCharacter2]
-    return [{ fetching: false, data: { Character: characters[characterId] }, stale: false }, () => { }]
+    return [
+      { fetching: false, data: { Character: characters[characterId] }, stale: false },
+      () => {}
+    ]
   }
 }
 
@@ -44,7 +46,7 @@ const renderComponent = (
     // Notice with prop injection, we don't need to use a context at all in order to test this component.
     // Unfortunately, React router still needs to be added to the test in our case but that's a limitation of React Router, not this library.
     <Router history={history}>
-      <Route exact path="/anime-character-details/:characterId">
+      <Route exact path='/anime-character-details/:characterId'>
         <AnimeCharacterPage deps={[animeApi]} />
       </Route>
     </Router>
@@ -57,12 +59,18 @@ const renderComponent = (
  */
 describe('AnimeCharacterPage', () => {
   describe('Given has navigated to the anime character details', () => {
-
     describe('When there is an error loading the page', () => {
-
       test('Then the user is shown an error message', () => {
         const animeCharacterAPI = new TestAnimeCharacterAPI()
-        jest.spyOn(animeCharacterAPI, 'getCharacterInfo').mockReturnValue([{ fetching: false, stale: false, data: {}, error: { graphQLErrors: [], name: 'Test', message: "Test Error" } }, jest.fn()])
+        jest.spyOn(animeCharacterAPI, 'getCharacterInfo').mockReturnValue([
+          {
+            fetching: false,
+            stale: false,
+            data: {},
+            error: { graphQLErrors: [], name: 'Test', message: 'Test Error' }
+          },
+          jest.fn()
+        ])
         const history = createBrowserHistory()
         history.push('/anime-character-details/1')
         const { getByTestId } = renderComponent(animeCharacterAPI, history)
@@ -71,10 +79,11 @@ describe('AnimeCharacterPage', () => {
     })
 
     describe('When the page is loading', () => {
-
       test('Then the user is shown a loading indicator', () => {
         const animeCharacterAPI = new TestAnimeCharacterAPI()
-        jest.spyOn(animeCharacterAPI, 'getCharacterInfo').mockReturnValue([{ fetching: true, stale: false, data: {} }, jest.fn()])
+        jest
+          .spyOn(animeCharacterAPI, 'getCharacterInfo')
+          .mockReturnValue([{ fetching: true, stale: false, data: {} }, jest.fn()])
         const history = createBrowserHistory()
         history.push('/anime-character-details/1')
         const { getByTestId } = renderComponent(animeCharacterAPI, history)
@@ -83,7 +92,6 @@ describe('AnimeCharacterPage', () => {
     })
 
     describe('When the page has loaded', () => {
-
       /**
        * If needed you can have jest mock the return value of the api service function but it does tie your tests to jest code.
        * For most people it's fine to tie tests to one testing framework/library but it is a consideration.
@@ -112,7 +120,6 @@ describe('AnimeCharacterPage', () => {
         getByTestId('characterDescription')
       })
     })
-
 
     /**
      * Here, instead of using jest to spy on the api function, we just test that the 2nd character we've provided in the mock
@@ -143,7 +150,7 @@ describe('AnimeCharacterPage', () => {
       })
     })
 
-    describe('When the user navigates to the previous character AND they\'re at the first page', () => {
+    describe("When the user navigates to the previous character AND they're at the first page", () => {
       test('Then nothing happens', () => {
         const history = createBrowserHistory()
         history.push('/anime-character-details/1')

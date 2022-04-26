@@ -5,12 +5,6 @@ export type CharacterDescriptionProps = {
   description: string
 }
 
-export const CharacterDescription = ({
-  description
-}: CharacterDescriptionProps) => {
-  return (
-    <ReactMarkdown data-testid='characterDescription'>
-      {description}
-    </ReactMarkdown>
-  )
+export const CharacterDescription = ({ description }: CharacterDescriptionProps) => {
+  return <ReactMarkdown data-testid='characterDescription'>{description}</ReactMarkdown>
 }

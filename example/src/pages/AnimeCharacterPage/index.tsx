@@ -1,4 +1,6 @@
+/* eslint-disable max-len */
 import { Provider, withInjector } from '@doughtnerd/wrangler-di'
+import React from 'react'
 import { GRAPHQL_API, UrqlGraphQLService } from '../../services/urql-graphql-client.service'
 import { AnimeCharacterPageWithDeps } from './AnimeCharacterPage'
 import {
@@ -28,4 +30,4 @@ const providers: Provider[] = [
   }
 ]
 
-export default withInjector(AnimeCharacterPageWithDeps, providers)
+export default withInjector(<AnimeCharacterPageWithDeps title='Anime Character Page' />, providers)

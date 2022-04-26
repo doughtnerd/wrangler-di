@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Injector } from './Injector'
-import { Provider } from './provider.type'
+import { InjectionToken, Provider } from './provider.type'
 
 type InjectorContextType = {
   injector: Injector
@@ -13,9 +13,11 @@ export type InjectorContextProviderProps = {
   children: React.ReactElement<any>
 }
 
-export const InjectorContextProvider = ({ providers, children }: InjectorContextProviderProps) => {
+export const InjectorContextProvider = ({
+  providers,
+  children
+}: InjectorContextProviderProps): JSX.Element => {
   const parentInjector = React.useContext(InjectorContext)
-
   return (
     <InjectorContext.Provider
       value={{ injector: new Injector(providers, parentInjector?.injector) }}
@@ -25,13 +27,23 @@ export const InjectorContextProvider = ({ providers, children }: InjectorContext
   )
 }
 
-const InjectorContextConsumer = ({
+type InjectorContextConsumerProps<
+  ComponentPropType extends Record<string, any> & { deps: ProviderTypes },
+  ProviderTypes extends Array<any>
+> = {
+  component: React.FC<ComponentPropType>
+  providerList: InjectionToken[]
+  props: Omit<ComponentPropType, 'deps'>
+}
+
+const InjectorContextConsumer = <
+  ComponentPropType extends Record<string, any> & { deps: ProviderTypes },
+  ProviderTypes extends Array<any>
+>({
   component: Component,
-  providerList
-}: {
-  component: any
-  providerList: string[]
-}): React.ReactElement<any | { deps: any[] }> => {
+  providerList,
+  props
+}: InjectorContextConsumerProps<ComponentPropType, ProviderTypes>): JSX.Element => {
   const injectorContext = React.useContext(InjectorContext)
 
   const injector = injectorContext?.injector
@@ -44,38 +56,45 @@ const InjectorContextConsumer = ({
   }
 
   const [compDeps] = React.useState(() =>
-    providerList.map((dep: any) => {
+    providerList.map((dep: InjectionToken) => {
       return injector.inject(dep)
     })
   )
 
-  if (!React.isValidElement(Component)) {
-    Component = React.createElement(Component)
-  }
+  const propsWithDeps = { ...props, deps: compDeps } as ComponentPropType & {
+    deps: ProviderTypes
+  } & { children: ReactNode }
 
-  return React.cloneElement(Component, {
-    ...Component.props,
-
-    deps: compDeps
-  } as any)
+  return <Component {...propsWithDeps} />
 }
 
-export const withProviders = <T extends unknown>(component: T, providerList: string[]) => {
-  return () => InjectorContextConsumer({ component, providerList })
+export const withProviders = <
+  ComponentPropType extends Record<string, any> & { deps: ProviderTypes },
+  ProviderTypes extends Array<any>
+>(
+  component: React.FC<ComponentPropType>,
+  providerList: string[]
+): React.FC<Omit<ComponentPropType, 'deps'>> => {
+  console.log('REACHEd')
+  return (props: Omit<ComponentPropType, 'deps'>) => (
+    <React.Fragment>
+      {InjectorContextConsumer<ComponentPropType, ProviderTypes>({
+        component,
+        providerList,
+        props
+      })}
+    </React.Fragment>
+  )
 }
 
-export const withInjector = (Component: any, providers: Provider[]) => {
+export const withInjector = (Component: React.ReactElement, providers: Provider[]) => {
   if (React.isValidElement(Component)) {
     return () => (
       <InjectorContextProvider providers={providers}>{Component}</InjectorContextProvider>
     )
   }
 
-  return () => (
-    <InjectorContextProvider providers={providers}>
-      <Component />
-    </InjectorContextProvider>
-  )
+  return () => <InjectorContextProvider providers={providers}>{Component}</InjectorContextProvider>
 }
 
 export type { Provider } from './provider.type'

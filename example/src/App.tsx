@@ -10,22 +10,23 @@ const client = createClient({
 
 const AnimeCharacterPage = React.lazy(() => import('./pages/AnimeCharacterPage'))
 
+const appProviders: Provider[] = [{ provide: GRAPHQL_API, useValue: UrqlGraphQLService }]
 
-const appProviders: Provider[] = [
-  { provide: GRAPHQL_API, useValue: UrqlGraphQLService }
-]
-
-const App = () => {
+const App: React.FC<{}> = () => {
   return (
     <React.StrictMode>
       <UrqlProvider value={client}>
         <React.Suspense fallback={<div>Loading...</div>}>
-          <HashRouter basename="/">
+          <HashRouter basename='/'>
             <Switch>
-              <Route path={'/'} exact>
-                <Redirect to="/anime-character-details/1"></Redirect>
+              <Route path='/' exact>
+                <Redirect to='/anime-character-details/1' />
               </Route>
-              <Route path={'/anime-character-details/:characterId'} exact component={AnimeCharacterPage}></Route>
+              <Route
+                path='/anime-character-details/:characterId'
+                exact
+                component={AnimeCharacterPage}
+              />
             </Switch>
           </HashRouter>
         </React.Suspense>
@@ -34,4 +35,4 @@ const App = () => {
   )
 }
 
-export default withInjector(App, appProviders)
+export default withInjector(<App />, appProviders)

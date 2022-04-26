@@ -10,13 +10,11 @@ import { IAnimeCharacterAPI } from './services/anime-character-api.interface'
 import { ANIME_CHARACTER_API_TOKEN } from './services/anime-character-api.service'
 
 export type AnimeCharacterPageProps = {
-  deps: [
-    IAnimeCharacterAPI
-  ]
+  title?: string
+  deps: [IAnimeCharacterAPI]
 }
 
-
-export const AnimeCharacterPage = ({ deps: [apiService] }: AnimeCharacterPageProps) => {
+export const AnimeCharacterPage = ({ title, deps: [apiService] }: AnimeCharacterPageProps) => {
   const params: { characterId: string } = useParams()
   const characterId = Number.parseInt(params.characterId, 10)
 
@@ -28,12 +26,15 @@ export const AnimeCharacterPage = ({ deps: [apiService] }: AnimeCharacterPagePro
 
   return (
     <PageLayout>
-      {error && <div data-testid="errorMessage">No Character with ID: {characterId} Found</div>}
+      <h4>{title}</h4>
+      {error && <div data-testid='errorMessage'>No Character with ID: {characterId} Found</div>}
       {data?.Character && <CharacterCard Character={data.Character} />}
       <FlexRow style={{ justifyContent: 'space-between', padding: '0 16px 0 16px' }}>
         <Link
           to={{
-            pathname: `/anime-character-details/${characterId === 1 ? characterId : characterId - 1}`,
+            pathname: `/anime-character-details/${
+              characterId === 1 ? characterId : characterId - 1
+            }`
           }}
           data-testid='previousCharacterButton'
         >
@@ -41,7 +42,7 @@ export const AnimeCharacterPage = ({ deps: [apiService] }: AnimeCharacterPagePro
         </Link>
         <Link
           to={{
-            pathname: `/anime-character-details/${characterId + 1}`,
+            pathname: `/anime-character-details/${characterId + 1}`
           }}
           data-testid='nextCharacterButton'
         >
@@ -52,6 +53,7 @@ export const AnimeCharacterPage = ({ deps: [apiService] }: AnimeCharacterPagePro
   )
 }
 
-export const AnimeCharacterPageWithDeps = withProviders(AnimeCharacterPage, [
-  ANIME_CHARACTER_API_TOKEN
-])
+export const AnimeCharacterPageWithDeps = withProviders<
+  AnimeCharacterPageProps,
+  [IAnimeCharacterAPI]
+>(AnimeCharacterPage, [ANIME_CHARACTER_API_TOKEN])
