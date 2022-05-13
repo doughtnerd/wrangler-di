@@ -43,7 +43,7 @@ const renderComponent = (
   history: any = createBrowserHistory()
 ): RenderResult => {
   return render(
-    // Notice with prop injection, we don't need to use a context at all in order to test this component.
+    // Notice with prop injection, we don't need to use an injector (withInjector) at all in order to test this component.
     // Unfortunately, React router still needs to be added to the test in our case but that's a limitation of React Router, not this library.
     <Router history={history}>
       <Route exact path='/anime-character-details/:characterId'>

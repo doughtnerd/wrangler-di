@@ -68,6 +68,14 @@ const InjectorContextConsumer = <
   return <Component {...propsWithDeps} />
 }
 
+/**
+ * A Higher Order Component that injects the dependencies of the component
+ *
+ * @param component The component to inject dependencies into
+ * @param providerList The providers you want to inject into the component
+ * @returns A HOC that injects the providers defined in `providerList` into the component and
+ * the resulting component
+ */
 export const withProviders = <
   ComponentPropType extends Record<string, any> & { deps: ProviderTypes },
   ProviderTypes extends Array<any>
@@ -75,7 +83,6 @@ export const withProviders = <
   component: React.FC<ComponentPropType>,
   providerList: string[]
 ): React.FC<Omit<ComponentPropType, 'deps'>> => {
-  console.log('REACHEd')
   return (props: Omit<ComponentPropType, 'deps'>) => (
     <React.Fragment>
       {InjectorContextConsumer<ComponentPropType, ProviderTypes>({
@@ -87,6 +94,14 @@ export const withProviders = <
   )
 }
 
+/**
+ * A Higher-Order Component that makes the Providers in the providers array available for injection.
+ *
+ * @param Component Component to be wrapped in the injector
+ * @param providers The list of services you want to provide for
+ * injection to children of the wrapped component
+ * @returns A HOC that wraps the component in the injector
+ */
 export const withInjector = (Component: React.ReactElement, providers: Provider[]) => {
   if (React.isValidElement(Component)) {
     return () => (
