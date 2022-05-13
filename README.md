@@ -12,6 +12,7 @@
     - [Factory Provider](#factory-provider)
   - [withInjector](#withinjector)
   - [withProviders](#withproviders)
+- [Typescript Support](#typescript-support)
 - [FAQ](#faq)
 
 ## Live Example
@@ -239,11 +240,14 @@ const SignInPage = withProviders(SignInPageBase, [ 'AuthService' ])
 return <SignInPage allowGoogleSignIn={false} />
 ```
 
+## Typescript Support
+This library was built in TS and hopefully provides useful types you can use. The best way to see how to use Typescript here is to look at the example project [found here](./example/src)
+
 ## FAQ
 ### Why are there no hooks or contexts that I can use?
-First, Context is useful in many scenarios but is both over-used and used inappropriately. Often using Context makes the component that uses it harder build, test, and re-use.
+First, because context is useful in many scenarios but is both over-used and used inappropriately. Often using context makes the component that uses it harder build, test, and re-use.
 
-Second, because Context and hooks defeat the purpose of using dependency injection in the first place - especially 
+Second, because context and hooks defeat the purpose of using dependency injection in the first place - especially when those hooks/contexts involve side-effects that change the world ***outside*** of the component.
 
 ## Warnings - Possible errors if you don't follow
 - Don't update the array used in withProviders at runtime
