@@ -1,14 +1,12 @@
-import { UrqlGraphQLService } from '../../../services/urql-graphql-client.service'
+import { IGraphQLClient } from '../../../services/urql-graphql-client.service'
 import { AnimeCharacterAPI } from './anime-character-api.service'
 
-const mockGraphql: typeof UrqlGraphQLService = {
-  useMutation: () => {
-    throw new Error('You should be mocking this')
-  },
-  useQuery: () => {
-    throw new Error('You should be mocking this')
-  }
+class MockGraphQL implements IGraphQLClient {
+  query = jest.fn()
+  mutation = jest.fn()
 }
+
+const mockGraphql = new MockGraphQL()
 
 const expectedValue = {
   Character: {
@@ -22,17 +20,16 @@ const expectedValue = {
 
 describe('AnimeCharacterAPI', () => {
   describe('#getCharacterInfo', () => {
-    it('Should return character info in the correct format', () => {
+    it('Should return character info in the correct format', async () => {
       const service = new AnimeCharacterAPI(mockGraphql)
-      jest.spyOn(mockGraphql, 'useQuery').mockReturnValue([
-        {
-          fetching: false,
-          stale: false,
-          data: expectedValue
-        },
-        jest.fn()
-      ])
-      expect(service.getCharacterInfo(1)[0].data).toBe(expectedValue)
+      jest.spyOn(mockGraphql, 'query').mockResolvedValue({
+        fetching: false,
+        stale: false,
+        data: expectedValue
+      })
+
+      const result = await service.getCharacterInfo(1)
+      expect(result.data).toBe(expectedValue)
     })
   })
 })

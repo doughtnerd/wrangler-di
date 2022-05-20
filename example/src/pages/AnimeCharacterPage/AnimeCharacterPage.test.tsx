@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
-import { fireEvent, render, RenderResult } from '@testing-library/react'
+import { fireEvent, render, RenderResult, waitFor } from '@testing-library/react'
 import { createBrowserHistory } from 'history'
 import React from 'react'
 import { Route, Router } from 'react-router-dom'
-import { UseQueryResponse } from 'urql'
+import { CombinedError } from 'urql'
 import { AnimeCharacterPage } from './AnimeCharacterPage'
 import { IAnimeCharacterAPI } from './services/anime-character-api.interface'
+import { Character } from './services/anime-character-api.service'
 
 // Annoying workaround I have to use for now for react-markdown until I figure out why jest is being a pain for this lib.
 jest.mock('react-markdown', () => {
@@ -29,12 +30,17 @@ const testCharacter2 = { ...defaultTestCharacter, ...{ name: { full: 'Test Chara
  * 3. Implements EXACTLY the contract described by the IAnimeCharacterAPI interface, maintaining parity between the real dependency and the test one.
  */
 class TestAnimeCharacterAPI implements IAnimeCharacterAPI {
-  getCharacterInfo(characterId: number): UseQueryResponse<any, { id: number }> {
-    const characters = [null, defaultTestCharacter, testCharacter2]
-    return [
-      { fetching: false, data: { Character: characters[characterId] }, stale: false },
-      () => {}
+  getCharacterInfo(characterId: number): Promise<{ data?: Character; error?: CombinedError }> {
+    const characters: Array<Character | undefined> = [
+      undefined,
+      defaultTestCharacter as Character,
+      testCharacter2 as Character
     ]
+
+    return Promise.resolve({
+      data: characters[characterId],
+      error: undefined
+    })
   }
 }
 
@@ -60,33 +66,33 @@ const renderComponent = (
 describe('AnimeCharacterPage', () => {
   describe('Given has navigated to the anime character details', () => {
     describe('When there is an error loading the page', () => {
-      test('Then the user is shown an error message', () => {
+      test('Then the user is shown an error message', async () => {
         const animeCharacterAPI = new TestAnimeCharacterAPI()
-        jest.spyOn(animeCharacterAPI, 'getCharacterInfo').mockReturnValue([
-          {
-            fetching: false,
-            stale: false,
-            data: {},
-            error: { graphQLErrors: [], name: 'Test', message: 'Test Error' }
-          },
-          jest.fn()
-        ])
+        const spy = jest.spyOn(animeCharacterAPI, 'getCharacterInfo').mockResolvedValue({
+          data: undefined,
+          error: { graphQLErrors: [], name: 'Test', message: 'Test Error' }
+        })
         const history = createBrowserHistory()
         history.push('/anime-character-details/1')
         const { getByTestId } = renderComponent(animeCharacterAPI, history)
+
+        await waitFor(() => expect(spy).toHaveBeenCalled())
         getByTestId('errorMessage')
       })
     })
 
     describe('When the page is loading', () => {
-      test('Then the user is shown a loading indicator', () => {
+      test('Then the user is shown a loading indicator', async () => {
         const animeCharacterAPI = new TestAnimeCharacterAPI()
-        jest
-          .spyOn(animeCharacterAPI, 'getCharacterInfo')
-          .mockReturnValue([{ fetching: true, stale: false, data: {} }, jest.fn()])
+        const spy = jest.spyOn(animeCharacterAPI, 'getCharacterInfo').mockResolvedValue({
+          data: undefined,
+          error: undefined
+        })
         const history = createBrowserHistory()
         history.push('/anime-character-details/1')
         const { getByTestId } = renderComponent(animeCharacterAPI, history)
+
+        await waitFor(() => expect(spy).toHaveBeenCalled())
         getByTestId('indeterminateLoadingIndicator')
       })
     })
@@ -96,12 +102,13 @@ describe('AnimeCharacterPage', () => {
        * If needed you can have jest mock the return value of the api service function but it does tie your tests to jest code.
        * For most people it's fine to tie tests to one testing framework/library but it is a consideration.
        */
-      test('Then they should see the first character by default', () => {
+      test('Then they should see the first character by default', async () => {
         const animeCharacterAPI = new TestAnimeCharacterAPI()
-        jest.spyOn(animeCharacterAPI, 'getCharacterInfo')
+        const spy = jest.spyOn(animeCharacterAPI, 'getCharacterInfo')
         const history = createBrowserHistory()
         history.push('/anime-character-details/1')
         renderComponent(animeCharacterAPI, history)
+        await waitFor(() => expect(spy).toHaveBeenCalled())
         expect(animeCharacterAPI.getCharacterInfo).toHaveBeenCalledWith(1)
       })
 
